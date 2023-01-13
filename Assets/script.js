@@ -59,155 +59,146 @@ let humidity5 = $("#humidity-5");
 //History
 let history = $("#history");
 let historyCount = 0;
-$(document).on("click", ".historyLi", function() {
-    searchBar.text("apsodfihafspdohfasdpoihafsdhiop");
+
+$(document).on("click", ".historyLi", function () {
+    searchBar.val($(this).text());
+    fetchWeather(event);
 });
 
 //Setting history
 startUp();
 function startUp() {
-    Object.keys(localStorage).forEach(function(key){
+    Object.keys(localStorage).forEach(function (key) {
         history.append(`<li class="historyLi list-group-item">${localStorage.getItem(key)}</li>`);
-        historyCount = localStorage.length;
-     });
+
+    });
 }
 
 function fetchWeather(event) {
     event.preventDefault();
     let citySearch = searchBar.val();
     //Updating history
-        if (historyCount < 5) {
-            localStorage.setItem("history" + historyCount, citySearch);
-        } else {
-            historyCount = 0;
-            fetchWeather(event);
-        }
-            if ($("#history li").length > 4) {
-                $("#history li").first().remove();
-            } else {
-            history.append(`<li class="historyLi list-group-item">${localStorage.getItem("history" + historyCount)}</li>`)
-            historyCount = historyCount + 1;
-            console.log(historyCount);
-            }
+    if (historyCount < 6) {
+        historyCount = historyCount + 1;
+        console.log(historyCount);
+        localStorage.setItem("history" + historyCount, citySearch);
+        history.append(`<li class="historyLi list-group-item">${localStorage.getItem("history" + historyCount)}</li>`)
 
-    //Clearing Past Search Results
-    cityName.empty();
-    date.empty();
-    conditions.empty();
-    temp.empty();
-    weatherIcon.empty();
-    wind.empty();
-    humidity.empty();
-    date1.empty();
-    max1.empty();
-    icon1.empty();
-    wind1.empty();
-    humidity1.empty();
-    date2.empty();
-    max2.empty();
-    icon2.empty();
-    wind2.empty();
-    humidity2.empty();
-    date3.empty();
-    max3.empty();
-    icon3.empty();
-    wind3.empty();
-    humidity3.empty();
-    date4.empty();
-    max4.empty();
-    icon4.empty();
-    wind4.empty();
-    humidity4.empty();
-    date5.empty();
-    max5.empty();
-    icon5.empty();
-    wind5.empty();
-    humidity5.empty();
+    } else {
+        historyCount = 0;
+        console.log(historyCount);
+        localStorage.setItem("history" + historyCount, citySearch);
+        history.append(`<li class="historyLi list-group-item">${localStorage.getItem("history" + historyCount)}</li>`)
+    }
+    if ($("#history li").length > 4) {
+        $("#history li").last().remove();
 
-
- 
-    let currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=a12ab13e9d9b3fabbc403be52164096a&units=Imperial";
-    //Getting current date & formatting to match weather API
-    let objectDate = new Date();
-    let day = objectDate.getDate();
-    let month = objectDate.getMonth();
-    let year = objectDate.getFullYear();
-    let hour = objectDate.getHours();
-    let minute = objectDate.getMinutes();
+        //Clearing Past Search Results
+        history.empty();
+        startUp();
+        cityName.empty();
+        date.empty();
+        conditions.empty();
+        temp.empty();
+        weatherIcon.empty();
+        wind.empty();
+        humidity.empty();
+        date1.empty();
+        max1.empty();
+        icon1.empty();
+        wind1.empty();
+        humidity1.empty();
+        date2.empty();
+        max2.empty();
+        icon2.empty();
+        wind2.empty();
+        humidity2.empty();
+        date3.empty();
+        max3.empty();
+        icon3.empty();
+        wind3.empty();
+        humidity3.empty();
+        date4.empty();
+        max4.empty();
+        icon4.empty();
+        wind4.empty();
+        humidity4.empty();
+        date5.empty();
+        max5.empty();
+        icon5.empty();
+        wind5.empty();
+        humidity5.empty();
 
 
-    
-    let getWeather = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=a12ab13e9d9b3fabbc403be52164096a&units=Imperial";
-    fetch(currentWeather)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return Promise.reject(response);
-            } 
-        })
-        .then(data => {
-            cityName.append(citySearch);
-            date.append(year + "-" + month + "-" + day + " " + hour + ":" + minute);
-            temp.append("Temperature: " + data.main.temp + " Degrees F");
-            weatherIcon.append(`<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"/>`)
-            conditions.append("Conditions: " + data.weather[0].description);
-            wind.append("Wind Speed: " + data.wind.speed + " mph");
-            humidity.append("Humidity: " + data.main.humidity + "%");
-        })
-    fetch(getWeather)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return Promise.reject(response);
-            }
-        })
-        .then(data => {
-            date1.append(data.list[7].dt_txt);
-            icon1.append(`<img src="https://openweathermap.org/img/wn/${data.list[7].weather[0].icon}@2x.png"/>`)
-            max1.append("Temperature: " + data.list[7].main.temp + " Degrees F");
-            wind1.append("Wind Speed: " + data.list[7].wind.speed + " mph");
-            humidity1.append("Humidity: " + data.list[7].main.humidity + "%");
 
-            date2.append(data.list[15].dt_txt);
-            icon2.append(`<img src="https://openweathermap.org/img/wn/${data.list[15].weather[0].icon}@2x.png"/>`);
-            max2.append("Temperature: " + data.list[15].main.temp + " Degrees F");
-            wind2.append("Wind Speed: " + data.list[15].wind.speed + " mph");
-            humidity2.append("Humidity: " + data.list[15].main.humidity + "%");
+        let currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + citySearch + "&appid=a12ab13e9d9b3fabbc403be52164096a&units=Imperial";
+        //Getting current date & formatting to match weather API
+        let objectDate = new Date();
+        let day = objectDate.getDate();
+        let month = objectDate.getMonth();
+        let year = objectDate.getFullYear();
+        let hour = objectDate.getHours();
+        let minute = objectDate.getMinutes();
 
-            date3.append(data.list[23].dt_txt);
-            icon3.append(`<img src="https://openweathermap.org/img/wn/${data.list[23].weather[0].icon}@2x.png"/>`);
-            max3.append("Temperature: " + data.list[23].main.temp + " Degrees F");
-            wind3.append("Wind Speed: " + data.list[23].wind.speed + " mph");
-            humidity3.append("Humidity: " + data.list[23].main.humidity + "%");
 
-            date4.append(data.list[31].dt_txt);
-            icon4.append(`<img src="https://openweathermap.org/img/wn/${data.list[31].weather[0].icon}@2x.png"/>`);
-            max4.append("Temperature: " + data.list[31].main.temp + " Degrees F");
-            wind4.append("Wind Speed: " + data.list[31].wind.speed + " mph");
-            humidity4.append("Humidity: " + data.list[31].main.humidity + "%");
 
-            date5.append(data.list[39].dt_txt);
-            icon5.append(`<img src="https://openweathermap.org/img/wn/${data.list[39].weather[0].icon}@2x.png"/>`);
-            max5.append("Temperature: " + data.list[39].main.temp + " Degrees F");
-            wind5.append("Wind Speed: " + data.list[39].wind.speed + " mph");
-            humidity5.append("Humidity: " + data.list[39].main.humidity + "%");
-        })
-        .catch(error => console.log(error));
+        let getWeather = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=a12ab13e9d9b3fabbc403be52164096a&units=Imperial";
+        fetch(currentWeather)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return Promise.reject(response);
+                }
+            })
+            .then(data => {
+                cityName.append(citySearch);
+                date.append(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                temp.append("Temperature: " + data.main.temp + " Degrees F");
+                weatherIcon.append(`<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"/>`)
+                conditions.append("Conditions: " + data.weather[0].description);
+                wind.append("Wind Speed: " + data.wind.speed + " mph");
+                humidity.append("Humidity: " + data.main.humidity + "%");
+            })
+        fetch(getWeather)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return Promise.reject(response);
+                }
+            })
+            .then(data => {
+                date1.append(data.list[7].dt_txt);
+                icon1.append(`<img src="https://openweathermap.org/img/wn/${data.list[7].weather[0].icon}@2x.png"/>`)
+                max1.append("Temperature: " + data.list[7].main.temp + " Degrees F");
+                wind1.append("Wind Speed: " + data.list[7].wind.speed + " mph");
+                humidity1.append("Humidity: " + data.list[7].main.humidity + "%");
+
+                date2.append(data.list[15].dt_txt);
+                icon2.append(`<img src="https://openweathermap.org/img/wn/${data.list[15].weather[0].icon}@2x.png"/>`);
+                max2.append("Temperature: " + data.list[15].main.temp + " Degrees F");
+                wind2.append("Wind Speed: " + data.list[15].wind.speed + " mph");
+                humidity2.append("Humidity: " + data.list[15].main.humidity + "%");
+
+                date3.append(data.list[23].dt_txt);
+                icon3.append(`<img src="https://openweathermap.org/img/wn/${data.list[23].weather[0].icon}@2x.png"/>`);
+                max3.append("Temperature: " + data.list[23].main.temp + " Degrees F");
+                wind3.append("Wind Speed: " + data.list[23].wind.speed + " mph");
+                humidity3.append("Humidity: " + data.list[23].main.humidity + "%");
+
+                date4.append(data.list[31].dt_txt);
+                icon4.append(`<img src="https://openweathermap.org/img/wn/${data.list[31].weather[0].icon}@2x.png"/>`);
+                max4.append("Temperature: " + data.list[31].main.temp + " Degrees F");
+                wind4.append("Wind Speed: " + data.list[31].wind.speed + " mph");
+                humidity4.append("Humidity: " + data.list[31].main.humidity + "%");
+
+                date5.append(data.list[39].dt_txt);
+                icon5.append(`<img src="https://openweathermap.org/img/wn/${data.list[39].weather[0].icon}@2x.png"/>`);
+                max5.append("Temperature: " + data.list[39].main.temp + " Degrees F");
+                wind5.append("Wind Speed: " + data.list[39].wind.speed + " mph");
+                humidity5.append("Humidity: " + data.list[39].main.humidity + "%");
+            })
+            .catch(error => console.log(error));
+    }
 }
-
-
-
-
-
-
-// GIVEN a weather dashboard with form inputs
-// WHEN I search for a city
-// THEN I am presented with current and future conditions for that city and that city is added to the search history
-// WHEN I view current weather conditions for that city
-// THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, and the the wind speed
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-// WHEN I click on a city in the search history
-// THEN I am again presented with current and future conditions for that city

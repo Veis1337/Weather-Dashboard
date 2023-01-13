@@ -19,6 +19,10 @@ header {
     color: #e5eaf5;
 }
 
+#cityName {
+    font-size: 3em;
+}
+
 #city-section {
     display: flex;
     flex-direction: row;
@@ -35,6 +39,10 @@ header {
     display: flex;
     margin: 1em;
     width: 60%;
+}
+
+.historyLi {
+    cursor: pointer;
 }
 
 .card-header span {
