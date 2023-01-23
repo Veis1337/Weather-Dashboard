@@ -92,6 +92,7 @@ function fetchWeather(event) {
     }
     if ($("#history li").length > 4) {
         $("#history li").last().remove();
+    }
 
         //Clearing Past Search Results
         history.empty();
@@ -201,4 +202,3 @@ function fetchWeather(event) {
             })
             .catch(error => console.log(error));
     }
-}
